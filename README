@@ -1,0 +1,42 @@
+I wrote this for our own internal company purposes, but am making it
+available publicly in hopes that it may be of use to others.  It is
+licensed under the GPL v2 (or later).
+
+I was wanting a way to determine whether or not a given host was up or
+not, and then take a user-defined action.  uCarp and Heartbeat are great
+for floating around virtual IP addresses for high-availability, but they
+don't seem to have this functionality built in.  This program is written
+in PHP and requires that the CLI version of PHP is installed.  I built
+it on PHP 5.5, but I believe it will work down to 5.3.
+
+This program contains two pieces to itself.  The first is the main
+program pulse.php, and the second is config.php with all of the
+configuration options.  This program runs as a daemon monitoring the
+specified hosts, then takes actions based on one of four conditions:
+
+- The host was up but is now down.
+- The host was down but is now up.
+- The host was up and is still up.
+- The host was down and is still down.
+
+The actions are defined as callback functions written in PHP (though
+using PHP's exec() function, they can really be anything).
+
+Here are the basic steps to setup:
+
+1) Download this repository.
+2) Edit config.php to suit your needs.
+3) Execute "php pulse.php --daemon".
+
+To create your callback functions, built then as regular PHP functions
+in one or more files ending in ".php", and put them into their own
+directory anywhere you'd like as long as pulse.php can include them.
+Tell pulse where to find them in config.php, then define which function
+to run when each of the above four events occur.  All of the events are
+optional, so you don't have to define all of them.  But you should
+define at least one, otherwise there's no point.
+
+The config.php file is heavily commented with descriptions on how to
+configure.  Reference the comments in that file for details of the
+configuration options.
+
